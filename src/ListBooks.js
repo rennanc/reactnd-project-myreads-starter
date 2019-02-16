@@ -1,11 +1,35 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
+import PropTypes from 'prop-types'
 import BookShortDetails from './Components/BookShortDetails';
 
 
 class ListBooks extends Component {
-    render(){
+    static propTypes = {
+        myReads: PropTypes.array.isRequired,
+    }
 
+    state = {
+        myReads : {
+          readings : [],
+          wantReads: [],
+          reads: [],
+        },
+      }
+
+    componentDidMount(){
+        this.setState(() => ({
+            myReads: this.props.myReads
+        }))
+    }
+
+    handleChangeShelfCallBack = (myReads) => {
+        this.setState({
+            myReads
+        });
+    }
+    
+    render(){
         const { myReads } = this.props
 
         return(
@@ -19,9 +43,13 @@ class ListBooks extends Component {
                     <h2 className="bookshelf-title">Currently Reading</h2>
                     <div className="bookshelf-books">
                         <ol className="books-grid">
-                        {myReads.readings.map((book) => (
+                        {this.state.myReads.readings.map((book) => (
                             <li key={book.id}>
-                                <BookShortDetails book={book} />
+                                <BookShortDetails 
+                                    book={book}
+                                    myReads={this.state.myReads}
+                                    handleChangeShelfCallBack={this.handleChangeShelfCallBack.bind(this)}
+                                    />
                             </li>
                         ))}
                         </ol>
@@ -33,7 +61,11 @@ class ListBooks extends Component {
                         <ol className="books-grid">
                         {myReads.wantReads.map((book) => (
                             <li key={book.id}>
-                                <BookShortDetails book={book} />
+                                <BookShortDetails 
+                                    book={book}
+                                    myReads={myReads}
+                                    handleChangeShelfCallBack={this.handleChangeShelfCallBack.bind(this)}
+                                    />
                             </li>
                         ))}
                         </ol>
@@ -45,7 +77,11 @@ class ListBooks extends Component {
                         <ol className="books-grid">
                         {myReads.reads.map((book) => (
                             <li key={book.id}>
-                                <BookShortDetails book={book} />
+                                <BookShortDetails 
+                                    book={book} 
+                                    myReads={myReads}
+                                    handleChangeShelfCallBack={this.handleChangeShelfCallBack.bind(this)}
+                                    />
                             </li>
                         ))}
                         </ol>

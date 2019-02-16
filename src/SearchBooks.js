@@ -7,7 +7,7 @@ import BookShortDetails from './Components/BookShortDetails';
 
 class SearchBooks extends Component {
     static propTypes = {
-        myReads: PropTypes.array.isRequired,
+        myReads: PropTypes.object.isRequired,
     }
 
     state = {
@@ -18,28 +18,29 @@ class SearchBooks extends Component {
 
     updateQuery = (query) =>{
         this.setState(() => ({
-            query: query.trim(),
+            query: query,
             books: [],
             showSearch: false,
         }))
-        this.handleSearch()
+        this.handleSearch(query)
     }
 
     clearQuery = () => {
         this.updateQuery('')
     }
     
-    handleSearch = () => {
-        if(this.state.query !== '')
-        BooksAPI.search(this.state.query)
+    handleSearch = (query) => {
+        if(query !== ''){
+            BooksAPI.search(query.trim())
             .then((books) => {
-                if(books.length > 0){
+                if(books !== null && books.length > 0){
                     this.setState(() => ({
                         books : books,
                         showSearch: true
                     }))
                 }
             })
+        }
     }
 
     render(){

@@ -1,10 +1,12 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
+import * as BooksAPI from '../BooksAPI'
+import { defaultNames } from '../Utils/Constants'
 
 
 class BookShortDetails extends Component {
     static propTypes = {
-        myReads: PropTypes.array.isRequired,
+        myReads: PropTypes.object.isRequired,
         book: PropTypes.object.isRequired,
         handleChangeShelfCallBack: PropTypes.func
     }
@@ -40,6 +42,9 @@ class BookShortDetails extends Component {
             this.props.myReads.wantReads = this.handleRemoveList(this.props.myReads.wantReads, book)
             this.props.myReads.reads = this.handleRemoveList(this.props.myReads.reads, book)
         }
+
+        BooksAPI.update(book, value)
+
         if(this.props.handleChangeShelfCallBack != null)
             this.props.handleChangeShelfCallBack(this.props.myReads);
     }
@@ -57,13 +62,29 @@ class BookShortDetails extends Component {
         return "none"
     }
 
+    showImage = (imageLinks) => {
+        let style = { 
+            width: 128,
+            height: 193,
+        };
+
+        if(imageLinks !== undefined){
+             if(imageLinks.smallThumbnail != null){
+                style = {...style, backgroundImage: `url(${imageLinks.smallThumbnail})`};
+            }else{
+                style = {...style, backgroundImage: `url(${imageLinks.thumbnail})`};
+            }
+        }
+        return style
+    }
+
     render(){
         const { book } = this.props
         
         return(
             <div className="book">
                 <div className="book-top">
-                    <div className="book-cover" style={{ width: 128, height: 193, backgroundImage: `url(${book.imageLinks.smallThumbnail})` }}></div>
+                    <div className="book-cover" style={this.showImage(book.imageLinks)}></div>
                     <div className="book-shelf-changer">
                     <select
                         defaultValue={this.handleBookShelfPosition(book.id)}

@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import * as BooksAPI from '../BooksAPI'
-import { defaultNames } from '../Utils/Constants'
 
 
 class BookShortDetails extends Component {

@@ -1,23 +1,32 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
 import PropTypes from 'prop-types'
-import BookShortDetails from './Components/BookShortDetails'
-
+import BookShelf from './Components/BookShelf'
 
 class ListBooks extends Component {
     static propTypes = {
         myReads: PropTypes.object.isRequired,
-    }
-    
-
-    handleChangeShelfCallBack = (myReads) => {
-        this.setState({
-            myReads
-        });
+        handleChangeShelfCallBack: PropTypes.func.isRequired,
     }
     
     render(){
-        const { myReads } = this.props
+        const { myReads, handleChangeShelfCallBack } = this.props
+
+        const shelfProps = [
+            {
+                name : 'Currently Reading',
+                listName: 'readings',
+            },
+            {
+                name : 'Want to Read',
+                listName: 'wantReads',
+            },
+            {
+                name : 'Read',
+                listName: 'reads'
+            }
+        ]
+
 
         return(
             <div className="list-books">
@@ -26,54 +35,15 @@ class ListBooks extends Component {
                 </div>
                 <div className="list-books-content">
                 <div>
-                    <div className="bookshelf">
-                    <h2 className="bookshelf-title">Currently Reading</h2>
-                    <div className="bookshelf-books">
-                        <ol className="books-grid">
-                        {myReads.readings.map((book) => (
-                            <li key={book.id}>
-                                <BookShortDetails 
-                                    book={book}
-                                    myReads={myReads}
-                                    handleChangeShelfCallBack={this.handleChangeShelfCallBack.bind(this)}
-                                    />
-                            </li>
-                        ))}
-                        </ol>
-                    </div>
-                    </div>
-                    <div className="bookshelf">
-                    <h2 className="bookshelf-title">Want to Read</h2>
-                    <div className="bookshelf-books">
-                        <ol className="books-grid">
-                        {myReads.wantReads.map((book) => (
-                            <li key={book.id}>
-                                <BookShortDetails 
-                                    book={book}
-                                    myReads={myReads}
-                                    handleChangeShelfCallBack={this.handleChangeShelfCallBack.bind(this)}
-                                    />
-                            </li>
-                        ))}
-                        </ol>
-                    </div>
-                    </div>
-                    <div className="bookshelf">
-                    <h2 className="bookshelf-title">Read</h2>
-                    <div className="bookshelf-books">
-                        <ol className="books-grid">
-                        {myReads.reads.map((book) => (
-                            <li key={book.id}>
-                                <BookShortDetails 
-                                    book={book} 
-                                    myReads={myReads}
-                                    handleChangeShelfCallBack={this.handleChangeShelfCallBack.bind(this)}
-                                    />
-                            </li>
-                        ))}
-                        </ol>
-                    </div>
-                    </div>
+                    {shelfProps.map((shelfProp) => (
+                        <BookShelf 
+                            myReads={myReads}
+                            handleChangeShelfCallBack={handleChangeShelfCallBack.bind(this)}
+                            shelfName={shelfProp.name}
+                            books={myReads[shelfProp.listName]}
+                        />
+                    ))}
+                    
                 </div>
                 </div>
                 <Link

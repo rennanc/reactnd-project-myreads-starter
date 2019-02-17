@@ -27,6 +27,12 @@ class BooksApp extends React.Component {
       })
   }
 
+  handleChangeShelfCallBack = (myReads) => {
+    this.setState({
+        myReads
+    });
+  }
+
   render() {
     return (
       <div className="app">
@@ -34,7 +40,9 @@ class BooksApp extends React.Component {
           <SearchBooks myReads={this.state.myReads} />
         )} />
         <Route exact path='/' render={() => (
-          <ListBooks myReads={this.state.myReads}/>
+          <ListBooks 
+            myReads={this.state.myReads}
+            handleChangeShelfCallBack={this.handleChangeShelfCallBack} />
         )}
         />
       </div>
